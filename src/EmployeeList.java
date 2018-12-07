@@ -102,6 +102,7 @@ public class EmployeeList
 
 
     public void sortByEmpId(long id) {
+//        if (isEmpty())
 //        int i;
 //        for(i=0; i<size; i++)
 //        {
