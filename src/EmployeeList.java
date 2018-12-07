@@ -102,10 +102,6 @@ public class EmployeeList
 
 
     public void sortByEmpId(long id) {
-        //if (isEmpty())
-        //   System.out.println("List is empty.");
-        //else {
-        //   boolean found=false;
 //        int i;
 //        for(i=0; i<size; i++)
 //        {
