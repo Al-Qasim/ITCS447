@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.GregorianCalendar;
 
 public class EmployeeList
@@ -150,11 +151,12 @@ public class EmployeeList
         size=0;
         list= new Employee[maxSize];
     }
-
-//    public EmployeeList() //3rd constructor: for file type parameter.
-//    {
-//
-//    }
-
-
+    public EmployeeList(String path) //3rd constructor: for file type parameter.
+    {
+        File name= new File(path);
+        if(name.exists())
+        {
+            
+        }
+    }
 }
