@@ -2,12 +2,10 @@ import com.github.lgooddatepicker.components.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
+import java.io.File;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 import java.util.Properties;
@@ -15,7 +13,8 @@ import java.util.Properties;
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
     private EmployeeList listProgress;
-    private JFileChooser fileChooser;
+    private JFileChooser fileChooser= new JFileChooser();
+    private File opened;
     private int listSize; //what for?
     private JButton createNew, importExisting, addEmp, delEmp, finalize;
     private JLabel lblID, lblFname, lblLname, lblDOB, lblDept, lblGender, lblPos, lblSal;
@@ -166,7 +165,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }
-    public EmployeeRecordsManager(int num)
+    public EmployeeRecordsManager(File f)
     {
         super("Create New List");
         setLayout(new FlowLayout());
@@ -183,6 +182,16 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
                 "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
                 "Department", "Position", "Salary"));
+
+        System.out.println(f.getAbsolutePath());
+        EmployeeList imported= new EmployeeList(f.getAbsolutePath()); // Create new list by passing absolute path to the constructor of employee list.
+        for(int i=0; i<imported.size(); i++)
+        {
+            listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+                    imported.list[i].getEmpID(), imported.list[i].getFirstName(),imported.list[i].getLastName(),imported.list[i].getGender(), imported.list[i].getBirthDate(),
+                    imported.list[i].getDepartment(), imported.list[i].getPosition(), imported.list[i].getSalary()));
+        }
+
         listInCreation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listInCreation.setVisibleRowCount(8);
         lowerBox.add(new JScrollPane(listInCreation));
@@ -206,13 +215,15 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         {
 
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); //extension filter for filechooser.
-            fileChooser= new JFileChooser();                                                                        //filechooser.
             fileChooser.addChoosableFileFilter(filter);                                                             //add filer to filechooser.
-            int status= fileChooser.showDialog(this, "Select");                             //save value of selection.
-            if(status== fileChooser.APPROVE_OPTION)                                                     // open filechooser dialog when import button is pressed.
-                new EmployeeRecordsManager(1);
+            int status= fileChooser.showOpenDialog(this);                             //save value of selection.
+            if(status== fileChooser.APPROVE_OPTION) {                                                  // open filechooser dialog when import button is pressed.
+                opened= fileChooser.getSelectedFile();
+                new EmployeeRecordsManager(opened);
+
+            }
         }
-        
+
         else if(e.getSource()==addEmp)
         {
 
