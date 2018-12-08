@@ -1,6 +1,7 @@
 import com.github.lgooddatepicker.components.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
@@ -14,6 +15,7 @@ import java.util.Properties;
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
     private EmployeeList listProgress;
+    private JFileChooser fileChooser;
     private int listSize; //what for?
     private JButton createNew, importExisting, addEmp, delEmp, finalize;
     private JLabel lblID, lblFname, lblLname, lblDOB, lblDept, lblGender, lblPos, lblSal;
@@ -187,7 +189,11 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         }
         else if(e.getSource()==importExisting)
         {
-            new EmployeeRecordsManager(1);
+            //new EmployeeRecordsManager(1);
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+            fileChooser= new JFileChooser();
+            fileChooser.setFileFilter(filter);
+            fileChooser.showDialog(this, "Select");
         }
         else if(e.getSource()==addEmp)
         {
