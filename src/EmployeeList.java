@@ -177,7 +177,7 @@ public class EmployeeList
                     employee.setLastName(input.next());
                     employee.setGender(input.next(".").charAt(0));
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");//For DOB
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");//For DOB //maybe this can change to suit the format produced by the formatter.
                     GregorianCalendar temp= new GregorianCalendar();//For DOB
                     temp.setTime(sdf.parse(input.next()));//For DOB
                     employee.setBirthDate(temp);//For DOB
@@ -185,7 +185,6 @@ public class EmployeeList
                     employee.setDepartment(input.next());
                     employee.setPosition(input.next());
                     employee.setSalary(Float.parseFloat(input.next()));
-                    //list[size++]=employee;
                     emplist.addEmployeeEnd(employee);
                 }
                 list= emplist.list;

@@ -22,7 +22,7 @@ public class Employee
     public String getDepartment(){return department;}
     public String getPosition(){return position;}
     public char getGender(){return gender;}
-    public Date getBirthDate(){return birthDate.getTime();}
+    public Date getBirthDate(){return birthDate.getTime();}//might have to change
     public float getSalary(){return salary;}
     public void printEmployee()
     {
