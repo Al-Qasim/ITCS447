@@ -6,7 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
@@ -15,6 +18,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private EmployeeList listProgress;
     private JFileChooser fileChooser= new JFileChooser();
     private File opened;
+    private Formatter writer;
     private int listSize; //what for?
     private JButton createNew, importExisting, addEmp, delEmp, finalize;
     private JLabel lblID, lblFname, lblLname, lblDOB, lblDept, lblGender, lblPos, lblSal;
@@ -277,6 +281,21 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         else if(e.getSource()==finalize)
         {
+            //do this now.
+            try {
+                writer= new Formatter("testfile.txt");
+                for(int i=0; i< listProgress.size(); i++)
+                {
+                    writer.format("%-5s %-5s %-5s %-5s %-5s %-5s %-5s %-5s\n",
+                            listProgress.list[i].getEmpID(), listProgress.list[i].getFirstName(),listProgress.list[i].getLastName(),
+                            listProgress.list[i].getGender(), listProgress.list[i].getBirthDate(),
+                            listProgress.list[i].getDepartment(), listProgress.list[i].getPosition(), listProgress.list[i].getSalary());
+                }
+                writer.close();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
 
         }
 

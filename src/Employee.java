@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Employee
@@ -21,7 +22,7 @@ public class Employee
     public String getDepartment(){return department;}
     public String getPosition(){return position;}
     public char getGender(){return gender;}
-    public GregorianCalendar getBirthDate(){return birthDate;}
+    public Date getBirthDate(){return birthDate.getTime();}
     public float getSalary(){return salary;}
     public void printEmployee()
     {
