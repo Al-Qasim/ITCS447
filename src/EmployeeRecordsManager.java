@@ -172,11 +172,26 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         setLayout(new FlowLayout());
 
 
-        lblFname= new JLabel("Yet to Implement");
-        add(lblFname);
+        Box lowerBox= Box.createVerticalBox();
+        lowerPanel= new JPanel();
+        //lowerPanel.setSize(800,300);
+        lowerPanel.setBorder(new TitledBorder("Current List Records"));
 
 
-        setSize(500, 300);
+        listModel= new DefaultListModel();
+        listInCreation= new JList(listModel);
+        listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+                "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
+                "Department", "Position", "Salary"));
+        listInCreation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listInCreation.setVisibleRowCount(8);
+        lowerBox.add(new JScrollPane(listInCreation));
+        lowerPanel.add(lowerBox);
+        add(lowerPanel);
+
+
+
+        setSize(1000, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }
@@ -187,14 +202,17 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         {
             new EmployeeRecordsManager("");
         }
-        else if(e.getSource()==importExisting)
+        else if(e.getSource()==importExisting)                                                                      // if import button is pressed.
         {
-            //new EmployeeRecordsManager(1);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
-            fileChooser= new JFileChooser();
-            fileChooser.setFileFilter(filter);
-            fileChooser.showDialog(this, "Select");
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); //extension filter for filechooser.
+            fileChooser= new JFileChooser();                                                                        //filechooser.
+            fileChooser.addChoosableFileFilter(filter);                                                             //add filer to filechooser.
+            int status= fileChooser.showDialog(this, "Select");                             //save value of selection.
+            if(status== fileChooser.APPROVE_OPTION)                                                     // open filechooser dialog when import button is pressed.
+                new EmployeeRecordsManager(1);
         }
+        
         else if(e.getSource()==addEmp)
         {
 
