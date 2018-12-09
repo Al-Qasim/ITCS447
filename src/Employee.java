@@ -40,7 +40,7 @@ public class Employee
     {
         empID=0;
         firstName="";
-        firstName="";
+        lastName="";
         department="";
         position="";
         gender='U';
@@ -51,7 +51,7 @@ public class Employee
     {
         empID=id;
         firstName=fname;
-        firstName=lname;
+        lastName=lname;
         department=dept;
         position=pos;
         gender=g;
