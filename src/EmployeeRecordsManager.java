@@ -1,19 +1,24 @@
 import com.github.lgooddatepicker.components.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
     private EmployeeList listProgress;
+    private JFileChooser fileChooser= new JFileChooser();
+    private File opened;
+    private Formatter writer;
     private int listSize; //what for?
     private JButton createNew, importExisting, addEmp, delEmp, finalize;
     private JLabel lblID, lblFname, lblLname, lblDOB, lblDept, lblGender, lblPos, lblSal;
@@ -138,7 +143,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         listModel= new DefaultListModel();
         listInCreation= new JList(listModel);
-        listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+        listModel.addElement(String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                                             "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
                                             "Department", "Position", "Salary"));
         listInCreation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -164,17 +169,42 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }
-    public EmployeeRecordsManager(int num)
+    public EmployeeRecordsManager(File f)
     {
         super("Create New List");
         setLayout(new FlowLayout());
 
 
-        lblFname= new JLabel("Yet to Implement");
-        add(lblFname);
+        Box lowerBox= Box.createVerticalBox();
+        lowerPanel= new JPanel();
+        //lowerPanel.setSize(800,300);
+        lowerPanel.setBorder(new TitledBorder("Current List Records"));
 
 
-        setSize(500, 300);
+        listModel= new DefaultListModel();
+        listInCreation= new JList(listModel);
+        listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+                "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
+                "Department", "Position", "Salary"));
+
+        System.out.println(f.getAbsolutePath());
+        EmployeeList imported= new EmployeeList(f.getAbsolutePath()); // Create new list by passing absolute path to the constructor of employee list.
+        for(int i=0; i<imported.size(); i++)
+        {
+            listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+                    imported.list[i].getEmpID(), imported.list[i].getFirstName(),imported.list[i].getLastName(),imported.list[i].getGender(), imported.list[i].getBirthDate(),
+                    imported.list[i].getDepartment(), imported.list[i].getPosition(), imported.list[i].getSalary()));
+        }
+
+        listInCreation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listInCreation.setVisibleRowCount(8);
+        lowerBox.add(new JScrollPane(listInCreation));
+        lowerPanel.add(lowerBox);
+        add(lowerPanel);
+
+
+
+        setSize(1000, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
     }
@@ -185,64 +215,103 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         {
             new EmployeeRecordsManager("");
         }
-        else if(e.getSource()==importExisting)
-        {
-            new EmployeeRecordsManager(1);
-        }
-        else if(e.getSource()==addEmp)
+        else if(e.getSource()==importExisting) // if import button is pressed.
         {
 
-            boolean found = false;
-            char ge;
-            long temp= Long.parseLong(tfID.getText());
-
-            selectedDate= GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
-
-            if(cbGender.getSelectedItem().toString() =="Male")
-                ge='M';
-            else
-                ge='F';
-            float money= Float.parseFloat(tfSal.getText());
-
-            found=listProgress.searchByEmpId(temp);
-            if(found)
-                JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
-                        "ERROR", JOptionPane.ERROR_MESSAGE);
-            else{
-            Employee New= null;
-            try {
-                New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
-                                        selectedDate, cbDept.getSelectedItem().toString(),
-                                        money, cbPos.getSelectedItem().toString());
-            } catch (InvalidIDException e1) {
-                e1.printStackTrace();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); //extension filter for filechooser.
+            fileChooser.addChoosableFileFilter(filter);//add filer to filechooser.
+            int status= fileChooser.showOpenDialog(this);//save value of selection.
+            if(status== fileChooser.APPROVE_OPTION)// open filechooser dialog when import button is pressed.
+            {
+                opened= fileChooser.getSelectedFile();
+                new EmployeeRecordsManager(opened);
             }
-            listProgress.addEmployeeEnd(New);
+        }
+
+        else if(e.getSource()==addEmp) {
+
+            if (tfID.getText().equals("") || tfFname.getText().equals("") || tfLname.getText().equals("") ||
+                    datePicker.getText().equals("") || tfSal.getText().equals(""))
+                JOptionPane.showMessageDialog(this, "You must fill in all required fields!",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            else
+                {
+                boolean found;
+                char ge;
+                long temp = Long.parseLong(tfID.getText());
+
+                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
+
+                if (cbGender.getSelectedItem().toString().equals("Male"))
+                    ge = 'M';
+                else
+                    ge = 'F';
+                float money = Float.parseFloat(tfSal.getText());
+
+                found = listProgress.searchByEmpId(temp);
+                if (found)
+                    JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+                else {
+                    Employee New = null;
+                    try {
+                        New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
+                                selectedDate, cbDept.getSelectedItem().toString(),
+                                money, cbPos.getSelectedItem().toString());
+                    } catch (InvalidIDException e1) {
+                        e1.printStackTrace();
+                    }
+                    listProgress.addEmployeeEnd(New);
 
 
 
-
-            String E= String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
-                    tfID.getText(), tfFname.getText(),tfLname.getText(),
-                    cbGender.getSelectedItem(), datePicker.getText(),
-                    cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
-            listModel.addElement(E);}
+                String E = String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
+                        tfID.getText(), tfFname.getText(), tfLname.getText(),
+                        cbGender.getSelectedItem(), datePicker.getText(),
+                        cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
+                listModel.addElement(E);}
+            }
         }
 
         else if(e.getSource()==delEmp)
         {
-            if(listInCreation.getSelectedIndex()!=0) {
+            if (listInCreation.isSelectionEmpty())
+                JOptionPane.showMessageDialog(this, "You must select a record to delete!",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            else if(listInCreation.getSelectedIndex()!=0) {
                 listModel.removeElementAt(listInCreation.getSelectedIndex());
                 listProgress.deleteEmployeeAt(listInCreation.getSelectedIndex()+1);
             }
             else
-                JOptionPane.showMessageDialog(this, "There are no more records to delete!",
-                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "This is not a record of the list!",
+                        "ERROR", JOptionPane.WARNING_MESSAGE);
         }
 
-        else if(e.getSource()==finalize)
-        {
+        else if(e.getSource()==finalize) {
+            //do this now.
+            if(listModel.getSize()==1)
+                JOptionPane.showMessageDialog(this, "There are no records in the list!",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            else{
+                try {
+                    int status = fileChooser.showSaveDialog(this);
+                    if (status == fileChooser.APPROVE_OPTION) {
+                        File save = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        writer = new Formatter(save);
+                        for (int i = 0; i < listProgress.size(); i++) {
+                            writer.format("%-5s %-5s %-5s %-5s %-5s %-5s %-5s %-5s\n",
+                                    listProgress.list[i].getEmpID(), listProgress.list[i].getFirstName(), listProgress.list[i].getLastName(),
+                                    listProgress.list[i].getGender(), listProgress.list[i].getBirthDate(),
+                                    listProgress.list[i].getDepartment(), listProgress.list[i].getPosition(), listProgress.list[i].getSalary());
+                        }
+                        writer.close();
+                    }
+                    }catch(FileNotFoundException e1){
+                    e1.printStackTrace();
+                }
 
+
+            }
         }
 
     }
