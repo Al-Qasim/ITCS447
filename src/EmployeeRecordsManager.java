@@ -253,7 +253,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
                             "ERROR", JOptionPane.ERROR_MESSAGE);
                 else {
-                    Employee New = null;
+                    Employee New = null; //To New it in try
                     try {
                         New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
                                 selectedDate, cbDept.getSelectedItem().toString(),
