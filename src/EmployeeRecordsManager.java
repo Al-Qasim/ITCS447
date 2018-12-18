@@ -34,6 +34,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                                                 "Finance", "Customer Service", "Overall Management"};
     private static final String []positions={"General Manager", "Manager", "Engineer", "Supervisor", "Accountant",
                                               "Technician", "Mechanic", "Secretary", "Clerk", "Labor"};
+
     public EmployeeRecordsManager()
     {
         super("Employee Records Manager");
