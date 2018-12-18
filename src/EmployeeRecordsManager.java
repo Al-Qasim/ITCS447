@@ -35,6 +35,11 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private static final String []positions={"General Manager", "Manager", "Engineer", "Supervisor", "Accountant",
                                               "Technician", "Mechanic", "Secretary", "Clerk", "Labor"};
 
+    private FDate BDate=new FDate();
+    private JComboBox days=new JComboBox(BDate.getDays());
+    private JComboBox months=new JComboBox(BDate.getMonths());
+    private JComboBox years=new JComboBox(BDate.getYears());
+
     public EmployeeRecordsManager()
     {
         super("Employee Records Manager");
@@ -95,14 +100,18 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         lblDOB= new JLabel("Date Of Birth: ");
         h1.add(lblDOB);
 
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        datePicker = new DatePicker();
-        h1.add(datePicker);
+        h1.add(days);
+        h1.add(months);
+        h1.add(years);
 
-        selectedDate= new GregorianCalendar();
+//        Properties p = new Properties();
+//        p.put("text.today", "Today");
+//        p.put("text.month", "Month");
+//        p.put("text.year", "Year");
+//        datePicker = new DatePicker();
+//        h1.add(datePicker);
+
+//        selectedDate= new GregorianCalendar();
 
         personalPanel.add(h1);
         add(personalPanel);
@@ -231,8 +240,10 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         else if(e.getSource()==addEmp) {
 
-            if (tfID.getText().equals("") || tfFname.getText().equals("") || tfLname.getText().equals("") ||
-                    datePicker.getText().equals("") || tfSal.getText().equals(""))
+            if (tfID.getText().equals("") ||
+                tfFname.getText().equals("") ||
+                tfLname.getText().equals("") ||
+                tfSal.getText().equals(""))
                 JOptionPane.showMessageDialog(this, "You must fill in all required fields!",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             else
@@ -241,7 +252,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 char ge;
                 long temp = Long.parseLong(tfID.getText());
 
-                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
+//----                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
                     ge = 'M';
@@ -257,7 +268,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     Employee New = null; //To New it in try
                     try {
                         New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
-                                selectedDate, cbDept.getSelectedItem().toString(),
+                                selectedDate, cbDept.getSelectedItem().toString(),//-----
                                 money, cbPos.getSelectedItem().toString());
                     } catch (InvalidIDException e1) {
                         e1.printStackTrace();
@@ -268,7 +279,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
                 String E = String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                         tfID.getText(), tfFname.getText(), tfLname.getText(),
-                        cbGender.getSelectedItem(), datePicker.getText(),
+                        cbGender.getSelectedItem(), /*datePicker.getText(),*/
                         cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
                 listModel.addElement(E);}
             }
