@@ -13,11 +13,11 @@ import java.util.*;
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
     private EmployeeList listProgress;
-    private JFileChooser fileChooser= new JFileChooser();
+    private final JFileChooser fileChooser= new JFileChooser();
     private File opened;
     private Formatter writer;
     private int listSize; //what for?
-    private JButton createNew, importExisting, addEmp, delEmp, finalize;
+    private JButton createNew, importExisting, addEmp, delEmp, finalize, updateEmp, updateInfo;
     private JLabel lblID, lblFname, lblLname, lblDOB, lblDept, lblGender, lblPos, lblSal;
     private JTextField tfID, tfFname, tfLname, tfSal;
     private DatePicker datePicker;
@@ -176,6 +176,9 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         delEmp= new JButton("Remove Employee");
         delEmp.addActionListener(this);
         btnBox.add(delEmp);
+        updateEmp= new JButton("Update Employee");
+        updateEmp.addActionListener(this);
+        btnBox.add(updateEmp);
         finalize= new JButton("Finalize List");
         finalize.addActionListener(this);
         btnBox.add(finalize);
@@ -286,7 +289,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         listModel= new DefaultListModel();
         listInCreation= new JList(listModel);
-        listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+        listModel.addElement(String.format("%-23s %-23s %-23s %-23s %-23s %-23s %-23s %-23s",
                 "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
                 "Department", "Position", "Salary"));
 
@@ -298,7 +301,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     + "/" + Integer.toString(imported.list[i].getBirthDate().get(Calendar.MONTH))
                     + "/" + Integer.toString(imported.list[i].getBirthDate().get(Calendar.YEAR));
 
-            listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
+            listModel.addElement(String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                     imported.list[i].getEmpID(), imported.list[i].getFirstName(),
                     imported.list[i].getLastName(),imported.list[i].getGender(),
                     NDate, imported.list[i].getDepartment(),
@@ -316,6 +319,9 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         btnBox.add(delEmp);
         finalize= new JButton("Finalize List");
         finalize.addActionListener(this);
+        updateEmp= new JButton("Update Employee");
+        updateEmp.addActionListener(this);
+        btnBox.add(updateEmp);
         btnBox.add(finalize);
         lowerBox.add(btnBox);
         lowerPanel.add(lowerBox);
@@ -324,7 +330,109 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         listProgress= imported;
 
 
-        setSize(1000, 400);
+        setSize(1000, 500);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(true);
+        setLocationRelativeTo(null);
+    }
+    public EmployeeRecordsManager(char c, DefaultListModel listModel, JList listInCreation, EmployeeList listProgress, int updateIndex)
+    {
+        super("Update Employee");
+        setLayout(new FlowLayout());
+
+
+        Box h1= Box.createVerticalBox();
+        Box hVert= Box.createVerticalBox();
+        Box h2= Box.createVerticalBox();
+        Box hDatelbl= Box.createHorizontalBox();
+        Box hDate= Box.createHorizontalBox();
+
+        personalPanel= new JPanel();
+        // proPanel.setSize(800,300);
+        personalPanel.setBorder(new TitledBorder("Personal Information"));
+
+        lblID= new JLabel("Employee ID: ");
+        h1.add(lblID);
+        tfID=new JTextField("", 15);
+        h1.add(tfID);
+
+        lblFname= new JLabel("First Name: ");
+        h1.add(lblFname);
+        tfFname=new JTextField("", 15);
+        h1.add(tfFname);
+
+        lblLname= new JLabel("Last Name: ");
+        h1.add(lblLname);
+        tfLname=new JTextField("", 15);
+        h1.add(tfLname);
+
+
+
+        lblGender= new JLabel("Gender: ");
+        h1.add(lblGender);
+        cbGender= new JComboBox(gender);
+        h1.add(cbGender);
+
+
+
+        lblDOB= new JLabel("Date Of Birth: ");
+        h1.add(lblDOB);
+
+        hDatelbl.add(daylbl);
+        hDatelbl.add(monthlbl);
+        hDatelbl.add(yearlbl);
+
+        h1.add(hDatelbl);
+
+        hDate.add(days);
+        hDate.add(months);
+        hDate.add(years);
+
+        h1.add(hDate);
+
+        personalPanel.add(h1);
+        add(personalPanel);
+
+        proPanel= new JPanel();
+        proPanel.setBorder(new TitledBorder("Professional Information"));
+
+
+        lblDept= new JLabel("Department: ");
+        h2.add(lblDept);
+        cbDept= new JComboBox(departments);
+        h2.add(cbDept);
+
+
+        lblPos= new JLabel("Position: ");
+        h2.add(lblPos);
+        cbPos= new JComboBox(positions);
+        h2.add(cbPos);
+
+
+        lblSal= new JLabel("Salary: ");
+        h2.add(lblSal);
+        tfSal=new JFormattedTextField();
+        h2.add(tfSal);
+        proPanel.add(h2);
+        add(proPanel);
+
+        hVert.add(personalPanel);
+        hVert.add(proPanel);
+        Box lowerBox= Box.createVerticalBox();
+        lowerPanel= new JPanel();
+
+        Box btnBox= Box.createVerticalBox();
+        updateInfo= new JButton("Update Info");
+        updateInfo.addActionListener(this);
+        btnBox.add(updateInfo);
+        lowerBox.add(btnBox);
+        lowerPanel.add(lowerBox);
+        hVert.add(lowerPanel);
+        add(hVert);
+
+
+
+        setSize(300, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         setLocationRelativeTo(null);
@@ -419,6 +527,67 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
             else
                 JOptionPane.showMessageDialog(this, "This is not a record of the list!",
                         "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        else if(e.getSource()==updateEmp)
+        {
+            if (listInCreation.isSelectionEmpty())
+                JOptionPane.showMessageDialog(this, "You must select a record to update!",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            else if(listInCreation.getSelectedIndex()!=0) {
+                new EmployeeRecordsManager('u', listModel, listInCreation, listProgress, listInCreation.getSelectedIndex()+1);
+            }
+            else
+                JOptionPane.showMessageDialog(this, "This is not a record of the list!",
+                        "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        else if(e.getSource()==updateInfo)
+        {
+            if (tfID.getText().equals("") ||
+                    tfFname.getText().equals("") ||
+                    tfLname.getText().equals("") ||
+                    tfSal.getText().equals(""))
+                JOptionPane.showMessageDialog(this, "You must fill in all required fields!",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            else
+            {
+                boolean found;
+                char ge;
+                long temp = Long.parseLong(tfID.getText());
+
+                if (cbGender.getSelectedItem().toString().equals("Male"))
+                    ge = 'M';
+                else
+                    ge = 'F';
+                float money = Float.parseFloat(tfSal.getText());
+                found = listProgress.searchByEmpId(temp);
+
+                if (found)
+                    JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+                else {
+                    Employee New = null; //To New it in try
+                    try {
+                        New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
+                                selectedDate, cbDept.getSelectedItem().toString(),
+                                money, cbPos.getSelectedItem().toString());
+                        listProgress.addEmployeeEnd(New);
+
+                        String NDate=Integer.toString(New.getBirthDate().get(Calendar.DAY_OF_MONTH))
+                                + "/" + Integer.toString(New.getBirthDate().get(Calendar.MONTH))
+                                + "/" + Integer.toString(New.getBirthDate().get(Calendar.YEAR));
+
+                        String E = String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
+                                tfID.getText(), tfFname.getText(), tfLname.getText(),
+                                cbGender.getSelectedItem(), NDate,
+                                cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
+                        listModel.addElement(E);
+                    } catch (InvalidIDException e1) {
+                        // e1.printStackTrace();
+                        JOptionPane.showMessageDialog(this, e1.getMsg(),
+                                "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
         }
 
         else if(e.getSource()==finalize) {

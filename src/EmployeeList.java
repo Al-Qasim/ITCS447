@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class EmployeeList
 {
@@ -176,7 +177,7 @@ public class EmployeeList
                     employee.setLastName(input.next());
                     employee.setGender(input.next(".").charAt(0));
 
-//                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");//For DOB //maybe this can change to suit the format produced by the formatter.
+
                     String NDate = input.next();
                     String D[]=NDate.split("/");
                     GregorianCalendar temp= new GregorianCalendar(Integer.parseInt(D[2]),Integer.parseInt(D[1]),Integer.parseInt(D[0]));//For DOB
