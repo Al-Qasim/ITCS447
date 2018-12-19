@@ -8,10 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.Properties;
+import java.util.*;
 
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
@@ -39,6 +36,9 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private JComboBox days=new JComboBox(BDate.getDays());
     private JComboBox months=new JComboBox(BDate.getMonths());
     private JComboBox years=new JComboBox(BDate.getYears());
+    private JLabel daylbl=new JLabel("Day    ");
+    private JLabel monthlbl=new JLabel("Month    ");
+    private JLabel yearlbl=new JLabel("Year");
 
     public EmployeeRecordsManager()
     {
@@ -68,6 +68,8 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         Box h1= Box.createVerticalBox();
         Box h2= Box.createVerticalBox();
         Box h3= Box.createVerticalBox();
+        Box hDatelbl= Box.createHorizontalBox();
+        Box hDate= Box.createHorizontalBox();
 
         personalPanel= new JPanel();
         // proPanel.setSize(800,300);
@@ -100,9 +102,17 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         lblDOB= new JLabel("Date Of Birth: ");
         h1.add(lblDOB);
 
-        h1.add(days);
-        h1.add(months);
-        h1.add(years);
+        hDatelbl.add(daylbl);
+        hDatelbl.add(monthlbl);
+        hDatelbl.add(yearlbl);
+
+        h1.add(hDatelbl);
+
+        hDate.add(days);
+        hDate.add(months);
+        hDate.add(years);
+
+        h1.add(hDate);
 
 //        Properties p = new Properties();
 //        p.put("text.today", "Today");
@@ -201,9 +211,15 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         EmployeeList imported= new EmployeeList(f.getAbsolutePath()); // Create new list by passing absolute path to the constructor of employee list.
         for(int i=0; i<imported.size(); i++)
         {
+            String NDate=Integer.toString(imported.list[i].getBirthDate().get(Calendar.DAY_OF_MONTH))
+                    + "/" + Integer.toString(imported.list[i].getBirthDate().get(Calendar.MONTH))
+                    + "/" + Integer.toString(imported.list[i].getBirthDate().get(Calendar.YEAR));
+
             listModel.addElement(String.format("%-20s %-20s %-20s %-20s %-20s %-20s %-20s %20s",
-                    imported.list[i].getEmpID(), imported.list[i].getFirstName(),imported.list[i].getLastName(),imported.list[i].getGender(), imported.list[i].getBirthDate(),
-                    imported.list[i].getDepartment(), imported.list[i].getPosition(), imported.list[i].getSalary()));
+                    imported.list[i].getEmpID(), imported.list[i].getFirstName(),
+                    imported.list[i].getLastName(),imported.list[i].getGender(),
+                    NDate, imported.list[i].getDepartment(),
+                    imported.list[i].getPosition(), imported.list[i].getSalary()));
         }
 
         listInCreation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -240,6 +256,12 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         else if(e.getSource()==addEmp) {
 
+            this.BDate.year = Integer.parseInt(this.BDate.years[this.years.getSelectedIndex()]);
+            this.BDate.day = Integer.parseInt(this.BDate.days[this.days.getSelectedIndex()]);
+            this.BDate.month = Integer.parseInt(this.BDate.months[this.months.getSelectedIndex()]);
+
+            selectedDate = new GregorianCalendar(this.BDate.year,this.BDate.month,this.BDate.day);
+
             if (tfID.getText().equals("") ||
                 tfFname.getText().equals("") ||
                 tfLname.getText().equals("") ||
@@ -252,15 +274,15 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 char ge;
                 long temp = Long.parseLong(tfID.getText());
 
-//----                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
+//                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
                     ge = 'M';
                 else
                     ge = 'F';
                 float money = Float.parseFloat(tfSal.getText());
+                found = listProgress.searchByEmpId(tfID.getText());
 
-                found = listProgress.searchByEmpId(temp);
                 if (found)
                     JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
                             "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -268,18 +290,22 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     Employee New = null; //To New it in try
                     try {
                         New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
-                                selectedDate, cbDept.getSelectedItem().toString(),//-----
+                                selectedDate, cbDept.getSelectedItem().toString(),
                                 money, cbPos.getSelectedItem().toString());
                     } catch (InvalidIDException e1) {
                         e1.printStackTrace();
+                        JOptionPane.showMessageDialog(this, e1.getMsg(),
+                                "ERROR", JOptionPane.ERROR_MESSAGE);
                     }
                     listProgress.addEmployeeEnd(New);
 
-
+                String NDate=Integer.toString(New.getBirthDate().get(Calendar.DAY_OF_MONTH))
+                        + "/" + Integer.toString(New.getBirthDate().get(Calendar.MONTH))
+                        + "/" + Integer.toString(New.getBirthDate().get(Calendar.YEAR));
 
                 String E = String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                         tfID.getText(), tfFname.getText(), tfLname.getText(),
-                        cbGender.getSelectedItem(), /*datePicker.getText(),*/
+                        cbGender.getSelectedItem(), NDate,
                         cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
                 listModel.addElement(E);}
             }
@@ -311,9 +337,13 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                         File save = new File(fileChooser.getSelectedFile().getAbsolutePath());
                         writer = new Formatter(save);
                         for (int i = 0; i < listProgress.size(); i++) {
+                            String NDate=Integer.toString(listProgress.list[i].getBirthDate().get(Calendar.DAY_OF_MONTH))
+                                 + "/" + Integer.toString(listProgress.list[i].getBirthDate().get(Calendar.MONTH))
+                                 + "/" + Integer.toString(listProgress.list[i].getBirthDate().get(Calendar.YEAR));
+
                             writer.format("%-5s %-5s %-5s %-5s %-5s %-5s %-5s %-5s\n",
                                     listProgress.list[i].getEmpID(), listProgress.list[i].getFirstName(), listProgress.list[i].getLastName(),
-                                    listProgress.list[i].getGender(), listProgress.list[i].getBirthDate(),
+                                    listProgress.list[i].getGender(), NDate,
                                     listProgress.list[i].getDepartment(), listProgress.list[i].getPosition(), listProgress.list[i].getSalary());
                         }
                         writer.close();

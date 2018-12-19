@@ -1,10 +1,10 @@
 public class FDate {
-    private static String []months=new String[12];
-    private static String []days=new String[31];
-    private static String []years=new String[65];
-    private String month;
-    private String day;
-    private String year;
+    public String []months=new String[12];
+    public String []days=new String[31];
+    public String []years=new String[65];
+    public int month;
+    public int day;
+    public int year;
 
     FDate()
     {
@@ -19,12 +19,12 @@ public class FDate {
             years[i] = (2018 - (X - i)) + "";
         }
 
-        this.month="0";
-        this.day="0";
-        this.year="0";
+        this.month=0;
+        this.day=0;
+        this.year=0;
     }
 
-    public void set(String y, String m, String d) {
+    public void set(int y, int m, int d) {
         this.year = y;
         this.month = m;
         this.day = d;
@@ -34,27 +34,27 @@ public class FDate {
         return(this.day+"/"+this.month+"/"+this.year);
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public void setMonth(String month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 

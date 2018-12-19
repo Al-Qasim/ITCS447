@@ -89,7 +89,7 @@ public class EmployeeList
     }
 
 
-    public boolean searchByEmpId(long id) {
+    public boolean searchByEmpId(String id) {
         boolean found = false;
         if (isEmpty())
             System.out.println("List is empty.");
@@ -97,7 +97,7 @@ public class EmployeeList
 
             int i;
             for (i = 0; i < size; i++) {
-                if (list[i].getEmpID() == id) {
+                if (Long.toString(list[i].getEmpID()) == id) {
                     found = true;
                     break;
                 }
@@ -177,14 +177,16 @@ public class EmployeeList
                     employee.setLastName(input.next());
                     employee.setGender(input.next(".").charAt(0));
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");//For DOB //maybe this can change to suit the format produced by the formatter.
-                    GregorianCalendar temp= new GregorianCalendar();//For DOB
-                    temp.setTime(sdf.parse(input.next()));//For DOB
+//                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");//For DOB //maybe this can change to suit the format produced by the formatter.
+                    String NDate = input.next();
+                    String D[]=NDate.split("/");
+                    GregorianCalendar temp= new GregorianCalendar(Integer.parseInt(D[2]),Integer.parseInt(D[1]),Integer.parseInt(D[0]));//For DOB
+//                    temp.setTime(sdf.parse(input.next()));//For DOB
                     employee.setBirthDate(temp);//For DOB
 
                     employee.setDepartment(input.next());
-                    employee.setPosition(input.next());
-                    employee.setSalary(Float.parseFloat(input.next()));
+                    employee.setPosition(input.next()+" "+input.next());
+                    employee.setSalary(input.nextFloat());
                     emplist.addEmployeeEnd(employee);
                 }
                 list= emplist.list;
@@ -196,9 +198,10 @@ public class EmployeeList
                 e.printStackTrace();
             } catch (InvalidIDException e) {
                 e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+//            catch (ParseException e) {
+//                e.printStackTrace();
+//            }
         }
         else
             System.out.println(String.format("%s    %s", path, "Does Not Exist!"));

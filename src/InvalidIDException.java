@@ -1,6 +1,9 @@
+import javax.swing.*;
+
 public class InvalidIDException extends Exception
 {
     private long cpr;
+    private String msg;
     public long getEmpID(){return cpr;}
     public InvalidIDException(long id)
     {
@@ -9,10 +12,15 @@ public class InvalidIDException extends Exception
     public InvalidIDException(String msg, long id)
     {
         super(msg);
+        this.msg=msg;
         cpr=id;
     }
     public String toString()
     {
         return ("Employee ID: "+cpr);
+    }
+    public String getMsg()
+    {
+        return (this.msg);
     }
 }
