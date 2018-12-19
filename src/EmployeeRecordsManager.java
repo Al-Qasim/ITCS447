@@ -475,7 +475,37 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 {
                 boolean found;
                 String ge;
-                long temp = Long.parseLong(tfID.getText());
+//                long temp = Long.parseLong(tfID.getText());
+                long temp;
+                boolean T1=false,T2=false;
+
+
+                if(!tfID.getText().isEmpty()){
+                    char tid[]= tfID.getText().toCharArray();
+                    for(int i=0;i<tfID.getText().length();i++)
+                    {
+                        if(!Character.isDigit(tid[i]))
+                        {
+                            T1=true;
+                            break;
+                        }
+                    }
+                    System.out.println("ID "+!T1);
+                }
+
+                if(!tfSal.getText().isEmpty()){
+                    char sa[]= tfSal.getText().toCharArray();
+                    for(int i=0;i<tfSal.getText().length();i++)
+                    {
+                        if(!Character.isDigit(sa[i]) && sa[i]!='.')
+                        {
+                            T2=true;
+                            break;
+                        }
+                    }
+                    System.out.println("Sal "+!T2);
+                }
+
 
 //                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
 
@@ -483,8 +513,13 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     ge = "Male";
                 else
                     ge = "Female";
-                float money = Float.parseFloat(tfSal.getText());
-                found = listProgress.searchByEmpId(temp);
+
+
+
+                if(!T1&&!T2) {
+                    temp = Long.parseLong(tfID.getText());
+                    found = listProgress.searchByEmpId(temp);
+                    float money = Float.parseFloat(tfSal.getText());
 
                 if (found)
                     JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
@@ -492,7 +527,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 else {
                     Employee New = null; //To New it in try
                     try {
-                        New = new Employee(temp, tfFname.getText(), tfLname.getText(), ge,
+                        New = new Employee(Long.parseLong(tfID.getText()), tfFname.getText(), tfLname.getText(), ge,
                                 selectedDate, cbDept.getSelectedItem().toString(),
                                 money, cbPos.getSelectedItem().toString());
                         listProgress.addEmployeeEnd(New);
@@ -513,6 +548,12 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     }
                     }
             }
+                else {
+                    if(T1)
+                        JOptionPane.showMessageDialog(null, "The ID Should be an integers");
+                    if(T2)
+                        JOptionPane.showMessageDialog(null, "The Salary Should be a float number");
+            }}
         }
 
         else if(e.getSource()==delEmp)
