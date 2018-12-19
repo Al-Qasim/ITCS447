@@ -185,7 +185,7 @@ public class EmployeeList
                     employee.setBirthDate(temp);//For DOB
 
                     employee.setDepartment(input.next());
-                    employee.setPosition(input.next()+" "+input.next());
+                    employee.setPosition(input.next());
                     employee.setSalary(input.nextFloat());
                     emplist.addEmployeeEnd(employee);
                 }

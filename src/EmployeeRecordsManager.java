@@ -27,9 +27,9 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private GregorianCalendar selectedDate;
     private JPanel lowerPanel, personalPanel, proPanel;
     private static final String []gender={"Male","Female"};
-    private static final String []departments={"Production", "Marketing", "Store and Purchase",
-                                                "Finance", "Customer Service", "Overall Management"};
-    private static final String []positions={"General Manager", "Manager", "Engineer", "Supervisor", "Accountant",
+    private static final String []departments={"Production", "Marketing", "Store-and-Purchase",
+                                                "Finance", "Customer-Service", "Overall-Management"};
+    private static final String []positions={"General-Manager", "Manager", "Engineer", "Supervisor", "Accountant",
                                               "Technician", "Mechanic", "Secretary", "Clerk", "Labor"};
 
     private FDate BDate=new FDate();
