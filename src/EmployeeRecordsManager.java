@@ -289,7 +289,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
 
         listModel= new DefaultListModel();
         listInCreation= new JList(listModel);
-        listModel.addElement(String.format("%-23s %-23s %-23s %-23s %-23s %-23s %-23s %-23s",
+        listModel.addElement(String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                 "Employee ID", "First Name","Last Name","Gender", "D.O.B.",
                 "Department", "Position", "Salary"));
 
@@ -474,15 +474,15 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
             else
                 {
                 boolean found;
-                char ge;
+                String ge;
                 long temp = Long.parseLong(tfID.getText());
 
 //                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
-                    ge = 'M';
+                    ge = "Male";
                 else
-                    ge = 'F';
+                    ge = "Female";
                 float money = Float.parseFloat(tfSal.getText());
                 found = listProgress.searchByEmpId(temp);
 
@@ -551,13 +551,13 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
             else
             {
                 boolean found;
-                char ge;
+                String ge;
                 long temp = Long.parseLong(tfID.getText());
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
-                    ge = 'M';
+                    ge = "Male";
                 else
-                    ge = 'F';
+                    ge = "Female";
                 float money = Float.parseFloat(tfSal.getText());
                 found = listProgress.searchByEmpId(temp);
 

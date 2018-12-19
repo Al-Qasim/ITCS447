@@ -64,7 +64,7 @@ public class EmployeeList
     }
 
 
-    public void updateRecord(long id, String fname, String lname, char g, GregorianCalendar date, String dept, float sal, String pos) {
+    public void updateRecord(long id, String fname, String lname, String g, GregorianCalendar date, String dept, float sal, String pos) {
         if (!isEmpty())
         {
             boolean found = false;
@@ -167,15 +167,18 @@ public class EmployeeList
         File name= new File(path);
         if(name.exists())
         {
-            Employee employee= new Employee();
+//            Employee employee= new Employee();
             try {
                 Scanner input= new Scanner(name);
                 while(input.hasNext())
                 {
+                    Employee employee= new Employee();
+
                     employee.setEmpID(input.nextLong());
                     employee.setFirstName(input.next());
                     employee.setLastName(input.next());
-                    employee.setGender(input.next(".").charAt(0));
+                    employee.setGender(input.next());
+//                    employee.setGender(input.next(".").charAt(0));
 
 
                     String NDate = input.next();
