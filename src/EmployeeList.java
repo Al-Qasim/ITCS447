@@ -89,15 +89,14 @@ public class EmployeeList
     }
 
 
-    public boolean searchByEmpId(String id) {
+    public boolean searchByEmpId(long id) {
         boolean found = false;
         if (isEmpty())
             System.out.println("List is empty.");
         else {
-
             int i;
             for (i = 0; i < size; i++) {
-                if (Long.toString(list[i].getEmpID()) == id) {
+                if (list[i].getEmpID() == id) {
                     found = true;
                     break;
                 }

@@ -1,5 +1,5 @@
-import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 
 public class Employee
 {
@@ -9,10 +9,9 @@ public class Employee
     private GregorianCalendar birthDate;
     private float salary;
     public void setEmpID(long id) throws InvalidIDException {
-        if(Long.toString(id).length()==9)
-            this.empID=id;
-        else
-            throw new InvalidIDException("The ID must exist 9 digits ",id);
+        empID=id;
+        if(!Pattern.matches("^[0-9]{9}$",id+""))
+            throw new InvalidIDException(id);
     }
     public void setFirstName(String name){firstName=name;}
     public void setLastName(String name){lastName=name;}
