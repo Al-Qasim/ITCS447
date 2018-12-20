@@ -39,6 +39,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private JLabel daylbl=new JLabel("Day    ");
     private JLabel monthlbl=new JLabel("Month    ");
     private JLabel yearlbl=new JLabel("Year");
+    private JDialog updateDialog= new JDialog();
 
     public EmployeeRecordsManager()
     {
@@ -199,7 +200,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     }
     public EmployeeRecordsManager(File f)
     {
-        super("Create New List");
+        super("Edit Existing List");
         setLayout(new FlowLayout());
 
 
@@ -342,10 +343,12 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         setVisible(true);
         setLocationRelativeTo(null);
     }
-    public EmployeeRecordsManager(char c, DefaultListModel listModel, JList listInCreation, EmployeeList listProgress, int updateIndex)
+
+    
+    public void updatePanel(int updateIndex)
     {
-        super("Update Employee");
-        setLayout(new FlowLayout());
+
+        updateDialog.setLayout(new FlowLayout());
 
 
         Box h1= Box.createVerticalBox();
@@ -429,7 +432,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         tfSal.setText(listProgress.list[updateIndex].getSalary()+"");
         h2.add(tfSal);
         proPanel.add(h2);
-        add(proPanel);
+        updateDialog.add(proPanel);
 
         hVert.add(personalPanel);
         hVert.add(proPanel);
@@ -444,14 +447,15 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         lowerBox.add(btnBox);
         lowerPanel.add(lowerBox);
         hVert.add(lowerPanel);
-        add(hVert);
+        updateDialog.add(hVert);
 
 
 
-        setSize(300, 500);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(true);
-        setLocationRelativeTo(null);
+        updateDialog.setSize(300, 500);
+        updateDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        updateDialog.setVisible(true);
+        updateDialog.setAlwaysOnTop(true);
+        updateDialog.setLocationRelativeTo(this);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -491,7 +495,6 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 {
                 boolean found;
                 String ge;
-//                long temp = Long.parseLong(tfID.getText());
                 long temp;
                 boolean T1=false,T2=false;
 
@@ -522,8 +525,6 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                     System.out.println("Sal "+!T2);
                 }
 
-
-//                selectedDate = GregorianCalendar.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()));
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
                     ge = "Male";
@@ -566,7 +567,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
             }
                 else {
                     if(T1)
-                        JOptionPane.showMessageDialog(null, "The ID Should be an integers");
+                        JOptionPane.showMessageDialog(null, "The ID Should consist of integers");
                     if(T2)
                         JOptionPane.showMessageDialog(null, "The Salary Should be a float number");
             }}
@@ -591,7 +592,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                 JOptionPane.showMessageDialog(this, "You must select a record to update!",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             else if(listInCreation.getSelectedIndex()!=0) {
-                new EmployeeRecordsManager('u', listModel, listInCreation, listProgress, listInCreation.getSelectedIndex()-1);
+                updatePanel(listInCreation.getSelectedIndex()-1);
             }
             else
                 JOptionPane.showMessageDialog(this, "This is not a record of the list!",
@@ -607,46 +608,35 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             else
             {
-                boolean found;
                 String ge;
                 long temp = Long.parseLong(tfID.getText());
+                this.BDate.year = Integer.parseInt(this.BDate.years[this.years.getSelectedIndex()]);
+                this.BDate.day = Integer.parseInt(this.BDate.days[this.days.getSelectedIndex()]);
+                this.BDate.month = Integer.parseInt(this.BDate.months[this.months.getSelectedIndex()]);
 
                 if (cbGender.getSelectedItem().toString().equals("Male"))
                     ge = "Male";
                 else
                     ge = "Female";
                 float money = Float.parseFloat(tfSal.getText());
-                selectedDate = new GregorianCalendar(this.BDate.year,this.BDate.month,this.BDate.day);
-//                found = listProgress.searchByEmpId(temp);
-
- //               if (found)
-//                    JOptionPane.showMessageDialog(this, "There is already a list member with the same ID!",
- //                           "ERROR", JOptionPane.ERROR_MESSAGE);
- //               else {
-
-                   // try {
-                System.out.println(listProgress.list.length);
+                selectedDate = new GregorianCalendar(BDate.year,BDate.month,BDate.day);
                 listProgress.updateRecord(temp, tfFname.getText(), tfLname.getText(), ge,
                                 selectedDate, cbDept.getSelectedItem().toString(),
                                 money, cbPos.getSelectedItem().toString());
 
 
-                        String NDate=Integer.toString(listProgress.list[globalUpdateIndex].getBirthDate().get(Calendar.DAY_OF_MONTH))
-                                + "/" + Integer.toString(listProgress.list[globalUpdateIndex].getBirthDate().get(Calendar.MONTH))
-                                + "/" + Integer.toString(listProgress.list[globalUpdateIndex].getBirthDate().get(Calendar.YEAR));
+                        String NDate= selectedDate.get(Calendar.DAY_OF_MONTH)
+                                + "/" + selectedDate.get(Calendar.MONTH)
+                                + "/" + selectedDate.get(Calendar.YEAR);
+
 
                         String E = String.format("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s",
                                 tfID.getText(), tfFname.getText(), tfLname.getText(),
                                 cbGender.getSelectedItem(), NDate,
-                                cbDept.getSelectedItem(), tfSal.getText(), cbPos.getSelectedItem());
-                        listModel.addElement(E);
-                    //}
-                    //catch (InvalidIDException e1) {
-                        // e1.printStackTrace();
-                     //   JOptionPane.showMessageDialog(this, e1.getMsg(),
-                     //           "ERROR", JOptionPane.ERROR_MESSAGE);
-                   // }
- //               }
+                                cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
+                        listModel.setElementAt(E, globalUpdateIndex+1);
+                        updateDialog.dispose();
+
             }
         }
 
@@ -683,7 +673,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         else if(e.getSource()==countRows) {
             //do this now.
             JOptionPane.showMessageDialog(this, "There are "+listProgress.size()+" records in the list!",
-                        "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                        "Record Count", JOptionPane.INFORMATION_MESSAGE);
 
         }
 
