@@ -39,7 +39,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     private JLabel daylbl=new JLabel("Day    ");
     private JLabel monthlbl=new JLabel("Month    ");
     private JLabel yearlbl=new JLabel("Year");
-    private JDialog updateDialog= new JDialog();
+    private JDialog updateDialog;
 
     public EmployeeRecordsManager()
     {
@@ -348,6 +348,7 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     public void updatePanel(int updateIndex)
     {
 
+        updateDialog= new JDialog();
         updateDialog.setLayout(new FlowLayout());
 
 
@@ -406,7 +407,6 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         h1.add(hDate);
 
         personalPanel.add(h1);
-        add(personalPanel);
 
         proPanel= new JPanel();
         proPanel.setBorder(new TitledBorder("Professional Information"));
@@ -455,6 +455,8 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
         updateDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         updateDialog.setVisible(true);
         updateDialog.setAlwaysOnTop(true);
+        updateDialog.setFocusableWindowState(true);
+        //this.setEnabled(false);
         updateDialog.setLocationRelativeTo(this);
     }
 
@@ -636,6 +638,8 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
                                 cbDept.getSelectedItem(), cbPos.getSelectedItem(), tfSal.getText());
                         listModel.setElementAt(E, globalUpdateIndex+1);
                         updateDialog.dispose();
+                        updateDialog=null;
+                        //this.setEnabled(true);
 
             }
         }
