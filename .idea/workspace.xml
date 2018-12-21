@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="557c65ae-ab91-400f-958e-1c1cb39ca7e3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Project/EmployeeRecordsManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project/EmployeeRecordsManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EmployeeRecordsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EmployeeRecordsManager.java" afterDir="false" />
-    </list>
+    <list default="true" id="557c65ae-ab91-400f-958e-1c1cb39ca7e3" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,16 +49,17 @@
     <session id="198041407">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.22" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.53" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
