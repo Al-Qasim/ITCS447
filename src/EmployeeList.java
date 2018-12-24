@@ -19,6 +19,12 @@ public class EmployeeList
             System.out.println("List is FULL!");
     }
 
+    /**
+     * this function to insert the Employee at specific position
+     * by move the array to the right starting from the size + 1 to the position
+     * @param e object of Employee class
+     * @param index integer contain the position of the insert
+     */
 
     public void addEmployeeAt(Employee e, int index) {
         if (!(size == maxSize))
@@ -32,6 +38,11 @@ public class EmployeeList
             System.out.println("List is FULL!");
     }
 
+    /**
+     * this function to delete the Employee at specific position
+     * by move the array to the left starting from the position to the size
+     * @param index integer contain the position of the insert
+     */
 
     public void deleteEmployeeAt(int index) {
         if (!(size == maxSize))
@@ -43,6 +54,10 @@ public class EmployeeList
             System.out.println("List is FULL!");
     }
 
+    /**
+     * this function to delete Employee has specific id
+     * @param id long integer contain the id of the employee that we want to deleted
+     */
 
     public void deleteEmployee(long id) {
         if (!isEmpty()) {
@@ -147,6 +162,10 @@ public class EmployeeList
         maxSize=newSize;
     }
 
+    /**
+     * constructor without parameter
+     */
+
     public EmployeeList()
     {
         maxSize=50;
@@ -154,12 +173,26 @@ public class EmployeeList
         list= new Employee[maxSize];
     }
 
+    /**
+     * constructor with size of the list of employee
+     * @param max
+     */
     public EmployeeList(int max)
     {
         maxSize=max;
         size=0;
         list= new Employee[maxSize];
+
     }
+
+    /**
+     * constructor with string contain the path of the file to get the data from it
+     * by using some object like "scanner" to read the data from the file ,
+     * "Employee" to set all data that was take it from the file and
+     * "EmployeeList" to add the Employee object.
+     * also, this constructor has "try and catch" if the file not found or the id is invalid
+     * @param path string contain the path of the file
+     */
     public EmployeeList(String path) //3rd constructor: for file type parameter.
     {
 
