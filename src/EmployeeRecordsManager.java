@@ -10,6 +10,12 @@ import java.io.FileNotFoundException;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * 20150884 - Mahmood Durazi
+ * 20147349 - SAYED ALQASIM DHEYA ALI
+ * 20151679 - Mahmoud Mohammed Mohsen
+ */
+
 public class EmployeeRecordsManager extends JFrame implements ActionListener
 {
     private EmployeeList listProgress;
