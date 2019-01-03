@@ -61,6 +61,17 @@ public class EmployeeRecordsManager extends JFrame implements ActionListener
     public EmployeeRecordsManager()
     {
         super("Employee Records Manager");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         setLayout(new FlowLayout());
 
         createNew= new JButton("Create New List", new ImageIcon(getClass().getResource("newListV3.png")));
